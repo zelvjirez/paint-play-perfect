@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paintball Ptuj - Adrenalinska izkušnja na Hajdini</title>
+  <meta name="description" content="Paintball Ptuj na Hajdini. Adrenalinska igra za rojstne dneve, fantovščine, team buildinge in druženja.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; border-color: hsl(160 8% 18%); }
+
+    :root {
+      --bg: hsl(160 10% 6%);
+      --fg: hsl(45 20% 90%);
+      --card: hsl(160 8% 10%);
+      --primary: hsl(36 100% 50%);
+      --primary-fg: hsl(160 10% 6%);
+      --muted: hsl(160 8% 14%);
+      --muted-fg: hsl(160 10% 55%);
+      --border: hsl(160 8% 18%);
+      --amber-glow: hsl(30 100% 60%);
+      --radius: 0.5rem;
+    }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    img { max-width: 100%; display: block; }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+
+    .text-gradient {
+      background: linear-gradient(135deg, var(--primary), var(--amber-glow));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .glow-amber {
+      box-shadow: 0 0 30px hsl(36 100% 50% / 0.3), 0 0 60px hsl(36 100% 50% / 0.1);
+    }
+
+    .section-gradient {
+      background: linear-gradient(180deg, var(--bg) 0%, var(--card) 50%, var(--bg) 100%);
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 0.75rem 2rem; border-radius: var(--radius);
+      font-family: 'Barlow', sans-serif; font-weight: 600;
+      font-size: 0.95rem; letter-spacing: 0.05em;
+      cursor: pointer; transition: all 0.3s; border: none;
+    }
+    .btn-hero {
+      background: var(--primary); color: var(--primary-fg);
+      box-shadow: 0 0 30px hsl(36 100% 50% / 0.3);
+    }
+    .btn-hero:hover { background: var(--amber-glow); }
+    .btn-outline {
+      background: transparent; color: var(--fg);
+      border: 2px solid hsl(36 100% 50% / 0.5);
+    }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+
+    /* ── NAVBAR ── */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      transition: all 0.3s;
+    }
+    .navbar.scrolled {
+      background: hsl(160 10% 6% / 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .navbar-inner {
+      display: flex; align-items: center; justify-content: space-between; height: 4rem;
+    }
+    .navbar-brand {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem;
+      color: var(--primary); letter-spacing: 0.1em;
+    }
+    .navbar-links { display: flex; gap: 2rem; }
+    .navbar-links a {
+      font-size: 0.875rem; font-weight: 500; color: var(--muted-fg);
+      transition: color 0.3s;
+    }
+    .navbar-links a:hover { color: var(--primary); }
+    .mobile-toggle {
+      display: none; background: none; border: none; color: var(--fg);
+      cursor: pointer; font-size: 1.5rem;
+    }
+    .mobile-menu {
+      display: none; flex-direction: column; gap: 1rem;
+      padding: 1rem 1.5rem; background: var(--bg); border-bottom: 1px solid var(--border);
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { color: var(--fg); font-weight: 500; }
+
+    @media (max-width: 768px) {
+      .navbar-links { display: none; }
+      .mobile-toggle { display: block; }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden; text-align: center;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('https://images.unsplash.com/photo-1555448049-8a7e6d9e3ad3?w=1600&q=80') center/cover no-repeat;
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, hsl(160 10% 6% / 0.3) 0%, hsl(160 10% 6% / 0.6) 50%, hsl(160 10% 6%) 100%);
+    }
+    .hero-content { position: relative; z-index: 10; }
+    .hero-sub {
+      font-size: 0.875rem; font-weight: 600;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--primary); margin-bottom: 1rem;
+    }
+    .hero h1 {
+      font-size: clamp(3.5rem, 10vw, 8rem); line-height: 1; margin-bottom: 1.5rem;
+    }
+    .hero-desc {
+      font-size: 1.15rem; color: var(--muted-fg);
+      max-width: 560px; margin: 0 auto 2.5rem;
+    }
+    .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    .scroll-indicator {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      width: 1.5rem; height: 2.5rem; border: 2px solid hsl(160 10% 55% / 0.4);
+      border-radius: 999px; display: flex; justify-content: center; padding-top: 0.5rem;
+    }
+    .scroll-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--primary);
+      animation: scrollBounce 1.5s infinite;
+    }
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
+
+    /* ── ABOUT ── */
+    .about { padding: 6rem 0; }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+    .about-img { border-radius: var(--radius); overflow: hidden; position: relative; }
+    .about-img img { width: 100%; height: auto; }
+    .about-corner {
+      position: absolute; bottom: -1rem; right: -1rem;
+      width: 6rem; height: 6rem; border: 2px solid var(--primary);
+      border-radius: var(--radius); opacity: 0.3;
+    }
+    .about h2 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 1.5rem; }
+    .about-text { color: var(--muted-fg); font-size: 1.1rem; line-height: 1.7; margin-bottom: 2.5rem; }
+    .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .feature-card {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      padding: 1rem; border-radius: var(--radius);
+      background: var(--card); border: 1px solid var(--border);
+    }
+    .feature-icon {
+      width: 24px; height: 24px; color: var(--primary); flex-shrink: 0; margin-top: 2px;
+    }
+    .feature-card h3 { font-size: 1.1rem; margin-bottom: 0.25rem; }
+    .feature-card p { font-size: 0.85rem; color: var(--muted-fg); }
+
+    @media (max-width: 768px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── OCCASIONS ── */
+    .occasions { padding: 6rem 0; }
+    .section-header { text-align: center; margin-bottom: 4rem; }
+    .section-header h2 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 1rem; }
+    .section-header p { color: var(--muted-fg); font-size: 1.1rem; max-width: 500px; margin: 0 auto; }
+    .occasions-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;
+    }
+    .occasion-card {
+      text-align: center; padding: 2rem;
+      border-radius: var(--radius); background: var(--card);
+      border: 1px solid var(--border); transition: border-color 0.3s;
+    }
+    .occasion-card:hover { border-color: hsl(36 100% 50% / 0.5); }
+    .occasion-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 3.5rem; height: 3.5rem; border-radius: 50%;
+      background: hsl(36 100% 50% / 0.1); color: var(--primary);
+      margin-bottom: 1.25rem; transition: all 0.3s;
+    }
+    .occasion-card:hover .occasion-icon {
+      background: var(--primary); color: var(--primary-fg);
+    }
+    .occasion-card h3 { font-size: 1.25rem; margin-bottom: 0.5rem; }
+    .occasion-card p { font-size: 0.85rem; color: var(--muted-fg); }
+
+    @media (max-width: 768px) {
+      .occasions-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .occasions-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── PRICING ── */
+    .pricing { padding: 6rem 0; }
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem; max-width: 960px; margin: 0 auto;
+    }
+    .pricing-card {
+      position: relative; display: flex; flex-direction: column;
+      padding: 2rem; border-radius: 0.75rem;
+      background: var(--card); border: 1px solid var(--border);
+    }
+    .pricing-card.highlighted {
+      border-color: var(--primary); transform: scale(1.03);
+      box-shadow: 0 0 30px hsl(36 100% 50% / 0.3), 0 0 60px hsl(36 100% 50% / 0.1);
+    }
+    .pricing-badge {
+      position: absolute; top: -0.75rem; left: 50%; transform: translateX(-50%);
+      background: var(--primary); color: var(--primary-fg);
+      font-size: 0.7rem; font-weight: 700; padding: 0.25rem 1rem;
+      border-radius: 999px; text-transform: uppercase; letter-spacing: 0.1em;
+    }
+    .pricing-card h3 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+    .pricing-card .desc { font-size: 0.85rem; color: var(--muted-fg); margin-bottom: 1.5rem; }
+    .pricing-price { margin-bottom: 2rem; }
+    .pricing-price span.amount { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; }
+    .pricing-price span.unit { font-size: 0.85rem; color: var(--muted-fg); margin-left: 0.25rem; }
+    .pricing-features { flex: 1; margin-bottom: 2rem; }
+    .pricing-features li {
+      display: flex; align-items: flex-start; gap: 0.5rem;
+      font-size: 0.875rem; color: var(--muted-fg); margin-bottom: 0.75rem;
+    }
+    .check-icon { color: var(--primary); flex-shrink: 0; margin-top: 2px; }
+    .pricing-card .btn { width: 100%; }
+
+    @media (max-width: 768px) {
+      .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+      .pricing-card.highlighted { transform: none; }
+    }
+
+    /* ── CONTACT ── */
+    .contact { padding: 6rem 0; }
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1.5rem; max-width: 640px; margin: 0 auto 2.5rem;
+    }
+    .contact-card {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1.25rem; border-radius: var(--radius);
+      background: var(--card); border: 1px solid var(--border);
+    }
+    .contact-card svg { color: var(--primary); flex-shrink: 0; }
+    .contact-card .label { font-size: 0.85rem; color: var(--muted-fg); }
+    .contact-card .value { font-weight: 600; }
+    .contact-cta { text-align: center; }
+
+    @media (max-width: 480px) {
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      border-top: 1px solid var(--border); padding: 2rem 0;
+    }
+    .footer-inner {
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--primary); letter-spacing: 0.1em; }
+    .footer-copy { font-size: 0.85rem; color: var(--muted-fg); }
+
+    /* ── ANIMATIONS ── */
+    .fade-up {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="container navbar-inner">
+    <a href="#" class="navbar-brand">Paintball Ptuj</a>
+    <div class="navbar-links">
+      <a href="#paintball">Paintball</a>
+      <a href="#priloznosti">Priložnosti</a>
+      <a href="#ponudba">Ponudba</a>
+      <a href="#kontakt">Kontakt</a>
+    </div>
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">☰</button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#paintball">Paintball</a>
+    <a href="#priloznosti">Priložnosti</a>
+    <a href="#ponudba">Ponudba</a>
+    <a href="#kontakt">Kontakt</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-sub">Hajdina, Ptuj</p>
+    <h1><span>Paintball</span><br><span class="text-gradient">Ptuj</span></h1>
+    <p class="hero-desc">Adrenalin. Taktika. Zabava. Nepozabna izkušnja.</p>
+    <div class="hero-buttons">
+      <a href="#kontakt" class="btn btn-hero">Rezerviraj termin</a>
+      <a href="https://maps.app.goo.gl/LgqQZUFozXAW2LLi6" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:0.5rem"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        Lokacija
+      </a>
+    </div>
+  </div>
+  <div class="scroll-indicator"><div class="scroll-dot"></div></div>
+</section>
+
+<!-- ABOUT -->
+<section class="about section-gradient" id="paintball">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-img fade-up">
+        <div class="glow-amber" style="border-radius:var(--radius);overflow:hidden">
+          <img src="https://images.unsplash.com/photo-1567176118554-6b54c85e4a71?w=800&q=80" alt="Paintball oprema">
+        </div>
+        <div class="about-corner"></div>
+      </div>
+      <div>
+        <h2 class="text-gradient fade-up">Kaj je paintball?</h2>
+        <p class="about-text fade-up">Paintball je adrenalinska igra, kjer igralci tekmujejo med seboj in se streljajo z markerji — puškami z barvnimi naboji. Cilj igre je izločiti vse nasprotnike ali doseči dogovorjen cilj. Igra poteka na poligonu z ovirami sredi narave.</p>
+        <div class="features-grid">
+          <div class="feature-card fade-up">
+            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+            <div><h3>Adrenalin</h3><p>Čisti adrenalin od prvega do zadnjega strela.</p></div>
+          </div>
+          <div class="feature-card fade-up">
+            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <div><h3>Timsko delo</h3><p>Strategija in komunikacija vodita do zmage.</p></div>
+          </div>
+          <div class="feature-card fade-up">
+            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <div><h3>Varnost</h3><p>Profesionalna oprema in nadzor na poligonu.</p></div>
+          </div>
+          <div class="feature-card fade-up">
+            <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5"/><path d="m12 12 5-3v6l-5-3z"/><path d="M7 3v4"/><path d="M12 3v4"/></svg>
+            <div><h3>Narava</h3><p>Poligon sredi gozdnega okolja na Hajdini.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OCCASIONS -->
+<section class="occasions" id="priloznosti">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="text-gradient fade-up">Za vsako priložnost</h2>
+      <p class="fade-up">Paintball popestri vsako druženje — od praznovanj do poslovnih dogodkov.</p>
+    </div>
+    <div class="occasions-grid">
+      <div class="occasion-card fade-up">
+        <div class="occasion-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12v0c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11v0c-.11.7-.72 1.22-1.43 1.22H17"/><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98v0C9.52 4.9 9 5.52 9 6.23V7"/><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/></svg>
+        </div>
+        <h3>Rojstni dnevi</h3>
+        <p>Nepozaben rojstni dan poln adrenalina in smeha.</p>
+      </div>
+      <div class="occasion-card fade-up">
+        <div class="occasion-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        </div>
+        <h3>Fantovščine</h3>
+        <p>Najboljša poslovilna zabava pred poroko.</p>
+      </div>
+      <div class="occasion-card fade-up">
+        <div class="occasion-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        </div>
+        <h3>Team building</h3>
+        <p>Krepitev ekipnega duha na zabaven način.</p>
+      </div>
+      <div class="occasion-card fade-up">
+        <div class="occasion-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>Druženje</h3>
+        <p>S prijatelji, družino ali sodelavci.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="ponudba">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="text-gradient fade-up">Ponudba</h2>
+      <p class="fade-up">Izberi paket, ki ti ustreza. Možnost dokupa nabojev na poligonu.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card fade-up">
+        <h3>Osnovni</h3>
+        <p class="desc">Za manjše skupine ali hitro igro</p>
+        <div class="pricing-price"><span class="amount text-gradient">15</span><span class="unit">€ / oseba</span></div>
+        <ul class="pricing-features">
+          <li><span class="check-icon">✓</span> Oprema (maska, marker, obleka)</li>
+          <li><span class="check-icon">✓</span> 100 nabojev</li>
+          <li><span class="check-icon">✓</span> 1 ura igre</li>
+          <li><span class="check-icon">✓</span> Inštruktor na poligonu</li>
+        </ul>
+        <a href="#kontakt" class="btn btn-outline">Rezerviraj</a>
+      </div>
+      <div class="pricing-card highlighted fade-up">
+        <span class="pricing-badge">Najbolj priljubljen</span>
+        <h3>Akcijski</h3>
+        <p class="desc">Najbolj priljubljen paket</p>
+        <div class="pricing-price"><span class="amount text-gradient">25</span><span class="unit">€ / oseba</span></div>
+        <ul class="pricing-features">
+          <li><span class="check-icon">✓</span> Oprema (maska, marker, obleka)</li>
+          <li><span class="check-icon">✓</span> 200 nabojev</li>
+          <li><span class="check-icon">✓</span> 2 uri igre</li>
+          <li><span class="check-icon">✓</span> Inštruktor na poligonu</li>
+          <li><span class="check-icon">✓</span> Dimne bombe</li>
+          <li><span class="check-icon">✓</span> Različni scenariji igre</li>
+        </ul>
+        <a href="#kontakt" class="btn btn-hero">Rezerviraj</a>
+      </div>
+      <div class="pricing-card fade-up">
+        <h3>Elitni</h3>
+        <p class="desc">Za prave paintball navdušence</p>
+        <div class="pricing-price"><span class="amount text-gradient">35</span><span class="unit">€ / oseba</span></div>
+        <ul class="pricing-features">
+          <li><span class="check-icon">✓</span> Premium oprema</li>
+          <li><span class="check-icon">✓</span> 300 nabojev</li>
+          <li><span class="check-icon">✓</span> 3 ure igre</li>
+          <li><span class="check-icon">✓</span> Osebni inštruktor</li>
+          <li><span class="check-icon">✓</span> Dimne bombe & granate</li>
+          <li><span class="check-icon">✓</span> Različni scenariji igre</li>
+          <li><span class="check-icon">✓</span> Fotografiranje</li>
+        </ul>
+        <a href="#kontakt" class="btn btn-outline">Rezerviraj</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact section-gradient" id="kontakt">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="text-gradient fade-up">Kontakt</h2>
+      <p class="fade-up">Rezerviraj svoj termin in pridi na poligon!</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-card fade-up">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <div><p class="label">Telefon</p><p class="value">Pokliči nas</p></div>
+      </div>
+      <div class="contact-card fade-up">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        <div><p class="label">Email</p><p class="value">Piši nam</p></div>
+      </div>
+      <div class="contact-card fade-up">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div><p class="label">Lokacija</p><p class="value">Hajdina, Ptuj</p></div>
+      </div>
+      <div class="contact-card fade-up">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <div><p class="label">Odpiralno</p><p class="value">Po dogovoru</p></div>
+      </div>
+    </div>
+    <div class="contact-cta fade-up">
+      <a href="https://maps.app.goo.gl/LgqQZUFozXAW2LLi6" target="_blank" rel="noopener noreferrer" class="btn btn-hero">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:0.5rem"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        Odpri v Google Maps
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <p class="footer-brand">Paintball Ptuj</p>
+    <p class="footer-copy">© 2025 Paintball Ptuj. Vse pravice pridržane.</p>
+  </div>
+</footer>
+
+<script>
+  // Navbar scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // Mobile menu
+  const toggle = document.getElementById('mobileToggle');
+  const menu = document.getElementById('mobileMenu');
+  toggle.addEventListener('click', () => {
+    const open = menu.classList.toggle('open');
+    toggle.textContent = open ? '✕' : '☰';
+  });
+  menu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      menu.classList.remove('open');
+      toggle.textContent = '☰';
+    });
+  });
+
+  // Scroll animations (IntersectionObserver)
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
